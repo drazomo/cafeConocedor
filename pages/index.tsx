@@ -20,6 +20,9 @@ const Home: NextPage = () => {
 
       <main className={styles.main}>
         <Banner buttonText='Cafeterias cerca de mi' handleOnClick={handleBannerClick} />
+        <div className={styles.heroImage}>
+          <Image alt='cafeteria hero image' src='/static/hero-img.png' width={700} height={400}/>
+        </div>
       </main>
     </div>
   )
