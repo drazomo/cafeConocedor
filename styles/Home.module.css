@@ -11,6 +11,17 @@
   padding-right: 1rem /* 16px */;
 }
 
+.cardLayout {
+  display: grid;
+  grid-template-columns: repeat(1, minmax(0, 1fr));
+  grid-gap: 1.5rem;
+}
+
+.card {
+  /* aligns to center of div */
+  justify-content: center;
+}
+
 .heroImage {
   position: absolute;
   top: 0px;
@@ -61,6 +72,11 @@
   }
   .cardLayout {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .cardLayout {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-gap: 1.5rem;
   }
 }
 

@@ -3,12 +3,14 @@ import Head from 'next/head'
 import Image from 'next/image'
 import styles from '../styles/Home.module.css'
 import Banner from '../components/banner';
+import Card from '../components/card';
+
 
 const Home: NextPage = () => {
 
   const handleBannerClick = () => {
-    console.log('Ciao! Banner!')
-  }
+    alert('Ciao! Banner!')
+  };
 
   return (
     <div className={styles.container}>
@@ -23,9 +25,12 @@ const Home: NextPage = () => {
         <div className={styles.heroImage}>
           <Image alt='cafeteria hero image' src='/static/hero-img.png' width={700} height={400}/>
         </div>
+        <div className={styles.cardLayout}>
+          <Card imgUrl={'/static/hero-img.png'} name={'LiaoCafe'} href={'/cafeteria/liao-cafe'} />
+        </div>
       </main>
     </div>
-  )
-}
+  );
+};
 
 export default Home;

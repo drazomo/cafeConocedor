@@ -7,8 +7,8 @@ class MyDocument extends Document {
         {/* link tag with any fonts, and etc. */}
       </Head>
       <body>
-        <Main></Main>
-        <NextScript />  {/* needed for next.js */}
+        <Main></Main> {/* needed for next.js => adds div with id of _next */}
+        <NextScript />  {/* needed for next.js to run scripts in the html*/}
       </body>
     </Html>
   }
