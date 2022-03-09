@@ -1,0 +1,42 @@
+[
+  {
+  "id": 0,
+  "name": "La Más Bonita",
+  "imgUrl": "https://lamasbonita.es/wp/wp-content/uploads/2015/09/P8.jpg",
+  "website": "https://lamasbonita.es/en/",
+  "address": "Carrer de Cádiz, 61 / Passieg Marítim de la Patacona, 11 Alboraya",
+  "zone": "Alboraya"
+},
+{
+  "id": 1,
+  "name": "Café Las Horas",
+  "imgUrl": "https://www.valenciabonita.es/wp-content/uploads/2016/03/Marc-Caf%C3%A9_De_Las_Horas_Valencia_3-1024x683.jpg",
+  "website": "https://cafedelashoras.com/",
+  "address": "Carrer del Comte d’Almodóvar, 1",
+  "zone": "Ciutat Vella"
+},
+{
+  "id": 2,
+  "name": "Ubik Café Cafetería Librería",
+  "imgUrl": "https://www.birdhouse.es/wp-content/uploads/ubik-cafe-800x600.jpg",
+  "website": "http://ubikcafe.blogspot.com/",
+  "address": "Carrer del Literat Azorín, 13",
+  "zone": "Ruzafa"
+},
+{
+  "id": 3,
+  "name": "Mayan Coffees",
+  "imgUrl": "https://offloadmedia.feverup.com/valenciasecreta.com/wp-content/uploads/2019/04/21093108/%40joeri110178-768x960.jpg",
+  "website": "https://mayancoffees.negocio.site/",
+  "address": "Carrer de Murillo, 54",
+  "zone": "Extramurs"
+},
+{
+  "id": 4,
+  "name": "Los Picos",
+  "imgUrl": "https://offloadmedia.feverup.com/valenciasecreta.com/wp-content/uploads/2019/04/21093106/los-picos-cafe-valencia-768x960.jpg",
+  "website": "https://www.instagram.com/lospicoscafe/?hl=en",
+  "address": "Plaça de Manuel Granero, 20",
+  "zone": "Ruzafa"
+}
+]

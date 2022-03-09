@@ -71,6 +71,7 @@
     padding-right: 1.5rem /* 24px */;
   }
   .cardLayout {
+    margin-top: 6rem;
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
