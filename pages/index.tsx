@@ -1,4 +1,4 @@
-import type { NextPage } from 'next'
+import type { NextPage, GetStaticProps, InferGetStaticPropsType } from 'next'
 import Head from 'next/head'
 import Image from 'next/image'
 import styles from '../styles/Home.module.css'
@@ -6,7 +6,18 @@ import Banner from '../components/banner';
 import Card from '../components/card';
 import cafeterias from '../data/cafeterias.json';
 
-const Home: NextPage = () => {
+export interface ICafeterias {
+  id: number;
+  name: string;
+  imgUrl: string;
+  website: string;
+  address: string;
+  zone: string;
+}
+
+const Home: NextPage = (props: InferGetStaticPropsType<typeof getStaticProps>) => {
+
+  console.log(props);
 
   const handleBannerClick = () => {
     alert('Ciao! Banner!')
@@ -27,8 +38,8 @@ const Home: NextPage = () => {
         </div>
         <div className={styles.cardLayout}>
           {
-            cafeterias.map(({name, id, imgUrl}) => (
-              <Card key={`${id}`} imgUrl={imgUrl} name={name} href={`/cafeteria/${id}`} />
+            props.cafes.map((cafe: ICafeterias) => (
+              <Card key={`${cafe.id}`} imgUrl={cafe.imgUrl} name={cafe.name} href={`/cafeteria/${cafe.id}`} />
             ))
           }
         </div>
@@ -36,5 +47,14 @@ const Home: NextPage = () => {
     </div>
   );
 };
+
+export const getStaticProps: GetStaticProps = async (context) => {
+  const cafes: ICafeterias[] = cafeterias
+  return {
+    props: {
+      cafes
+    },
+  }
+}
 
 export default Home;
