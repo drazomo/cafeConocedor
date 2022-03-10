@@ -4,7 +4,8 @@ import Image from 'next/image'
 import styles from '../styles/Home.module.css'
 import Banner from '../components/banner';
 import Card from '../components/card';
-import cafeterias from '../data/cafeterias.json';
+import cafeteriasData from '../data/cafeterias.json';
+import React from 'react';
 
 export interface ICafeterias {
   id: number;
@@ -15,9 +16,8 @@ export interface ICafeterias {
   zone: string;
 }
 
+//CLIENT
 const Home: NextPage = (props: InferGetStaticPropsType<typeof getStaticProps>) => {
-
-  console.log(props);
 
   const handleBannerClick = () => {
     alert('Ciao! Banner!')
@@ -36,23 +36,28 @@ const Home: NextPage = (props: InferGetStaticPropsType<typeof getStaticProps>) =
         <div className={styles.heroImage}>
           <Image alt='cafeteria hero image' src='/static/hero-img.png' width={700} height={400}/>
         </div>
+        {props.cafeterias.length > 0 && 
+        <React.Fragment>
+        <h2 className={styles.heading2}>Cafeterias en Valencia</h2>
         <div className={styles.cardLayout}>
           {
-            props.cafes.map((cafe: ICafeterias) => (
-              <Card key={`${cafe.id}`} imgUrl={cafe.imgUrl} name={cafe.name} href={`/cafeteria/${cafe.id}`} />
+            props.cafeterias.map((cafeteria: ICafeterias) => (
+              <Card key={`${cafeteria.id}`} imgUrl={cafeteria.imgUrl} name={cafeteria.name} href={`/cafeteria/${cafeteria.id}`} />
             ))
           }
         </div>
+        </React.Fragment>}
       </main>
     </div>
   );
 };
 
+// SERVER
 export const getStaticProps: GetStaticProps = async (context) => {
-  const cafes: ICafeterias[] = cafeterias
+  const cafeterias: ICafeterias[] = cafeteriasData
   return {
     props: {
-      cafes
+      cafeterias
     },
   }
 }
