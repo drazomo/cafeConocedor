@@ -53,8 +53,8 @@ const Home: NextPage = (props: InferGetStaticPropsType<typeof getStaticProps>) =
 };
 
 // SERVER
-export const getStaticProps: GetStaticProps = async (context) => {
-  const cafeterias: ICafeterias[] = cafeteriasData
+export const getStaticProps: GetStaticProps = async () => {
+  const cafeterias: ICafeterias[] = await cafeteriasData
   return {
     props: {
       cafeterias
