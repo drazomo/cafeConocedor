@@ -35,7 +35,6 @@ export const getStaticProps: GetStaticProps = (context) => {
   // signifies ! that the params will not be undefined && str converted to number for type capability
   const paramsId = context.params!.id;
   const findCafteriaById = cafeteriaData.find(local => local.id.toString() === paramsId)
-  console.log(findCafteriaById);
   return {props: {
     cafeteria: findCafteriaById
   }}
