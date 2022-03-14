@@ -8,12 +8,13 @@ import React from 'react';
 import { fetchCafeterias } from '../lib/cafeterias_lib';
 
 export interface ICafeterias {
-  fsq_id: number;
+  fsq_id: string;
   name: string;
   imgUrl?: string;
-  website: string;
-  address: string;
-  zone: string;
+  location: {
+    address?: string;
+    neighborhood?: string;
+  }
 }
 
 //CLIENT
