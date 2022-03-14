@@ -4,13 +4,13 @@ import Image from 'next/image'
 import styles from '../styles/Home.module.css'
 import Banner from '../components/banner';
 import Card from '../components/card';
-import cafeteriasData from '../data/cafeterias.json';
 import React from 'react';
+import { fetchCafeterias } from '../lib/cafeterias_lib';
 
 export interface ICafeterias {
   id: number;
   name: string;
-  imgUrl: string;
+  imgUrl?: string;
   website: string;
   address: string;
   zone: string;
@@ -42,7 +42,7 @@ const Home: NextPage = (props: InferGetStaticPropsType<typeof getStaticProps>) =
         <div className={styles.cardLayout}>
           {
             props.cafeterias.map((cafeteria: ICafeterias) => (
-              <Card key={`${cafeteria.id}`} imgUrl={cafeteria.imgUrl} name={cafeteria.name} href={`/cafeteria/${cafeteria.id}`} />
+              <Card key={`${cafeteria.id}`} imgUrl={cafeteria.imgUrl || 'https://cdn.pixabay.com/photo/2016/04/12/11/19/coffee-1324126_960_720.jpg'} name={cafeteria.name} href={`/cafeteria/${cafeteria.id}`} />
             ))
           }
         </div>
@@ -54,7 +54,8 @@ const Home: NextPage = (props: InferGetStaticPropsType<typeof getStaticProps>) =
 
 // SERVER
 export const getStaticProps: GetStaticProps = async () => {
-  const cafeterias: ICafeterias[] = cafeteriasData
+  const cafeterias = await fetchCafeterias();
+
   return {
     props: {
       cafeterias

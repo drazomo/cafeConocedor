@@ -6,6 +6,6 @@ const nextConfig = {
 module.exports = {
   nextConfig,
   images: {
-    domains: ['lamasbonita.es', 'www.valenciabonita.es', 'www.birdhouse.es', 'offloadmedia.feverup.com',]
+    domains: ['cdn.pixabay.com',]
   }
 }
