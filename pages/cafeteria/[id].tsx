@@ -6,14 +6,13 @@ import styles from '../../styles/Cafeteria.module.css';
 import cafeteriaData from '../../data/cafeterias.json';
 import Image from 'next/image';
 import cls from 'classnames';
+import { fetchCafeterias } from '../../lib/cafeterias_lib';
 
 const Cafeteria: NextPage = ({cafeteria}: InferGetStaticPropsType<typeof getStaticProps>) => {
   const router = useRouter();
   // fallback version if page is rendered for first time
   {router.isFallback && <div>Loading...</div>}
   //destructuring happpens incase of the router fallback / rendering data for the 1st time
-
-  const {name, zone, imgUrl, address} = cafeteria;
 
   const handleUpVoteBtn = () => {
     console.log("handle upvt")
@@ -22,7 +21,7 @@ const Cafeteria: NextPage = ({cafeteria}: InferGetStaticPropsType<typeof getStat
   return (
     <div className={styles.layout}>
       <Head>
-        <title>{name}</title>
+        <title>{'name_paco_taco'}</title>
       </Head>
         <div className={styles.container}>
           <div className={styles.col1}>
@@ -32,24 +31,24 @@ const Cafeteria: NextPage = ({cafeteria}: InferGetStaticPropsType<typeof getStat
             </Link>
             </div>
             <div className={styles.titleWrpr}>
-              <h1 className={styles.cafeName}>{name}</h1>
+              <h1 className={styles.cafeName}>{'name paco taco'}</h1>
             </div>
             <Image 
             width={600} 
             height={360} 
             className={styles.storeImg} 
-            alt={name}
-            src={imgUrl}
+            alt={'paco taco'}
+            src={'https://cdn.pixabay.com/photo/2016/04/12/11/19/coffee-1324126_960_720.jpg'}
             />
           </div>
           <div className={cls('glass',styles.col2)}>
             <div className={styles.icnWrpr}>
               <Image src='/static/icons/sitios.svg' width={24} height={24} alt='icon domicillo'/>
-              <p className={styles.icnText}>{address}</p>
+              <p className={styles.icnText}>{'address paco taco'}</p>
             </div>
             <div className={styles.icnWrpr}>
               <Image src='/static/icons/cerca_de_mi.svg' width={24} height={24} alt='icon zona'/>
-              <p className={styles.icnText}>{zone}</p>
+              <p className={styles.icnText}>{'zone paco taco'}</p>
             </div> 
             <div className={styles.icnWrpr}>
               <Image src='/static/icons/estrella.svg' width={24} height={24} alt='icon likes'/>
@@ -58,9 +57,9 @@ const Cafeteria: NextPage = ({cafeteria}: InferGetStaticPropsType<typeof getStat
             <button className={styles.upVoteBtn} onClick={handleUpVoteBtn}>
               Up Vote
             </button>
-            <p>{address}</p>
-            <p>{name}</p>
-            <p>{zone}</p>
+            <p>{'address paco taco'}</p>
+            <p>{'name paco taco'}</p>
+            <p>{'zone paco taco'}</p>
           </div>
         </div>
     </div>
@@ -70,22 +69,23 @@ const Cafeteria: NextPage = ({cafeteria}: InferGetStaticPropsType<typeof getStat
 export const getStaticProps: GetStaticProps = async (context) => {
   // signifies ! that the params will not be undefined && number converted to str for type capability
   const paramsId = context.params!.id;
-  const findCafteriaById = cafeteriaData.find(local => (local.id.toString() === paramsId));
+  const cafeterias = await fetchCafeterias();
 
   return {props: {
-    cafeteria: findCafteriaById
+    cafeteria: cafeterias.find((local: { fsq_id: string }) => (local.fsq_id === paramsId))
   }}
 
 };
 
 export const getStaticPaths = async({}): Promise<GetStaticPathsResult> => {
-  // fallback false => 404 error 
+  // fallback false => 404 error v
   // fallback true => best if you have a lot of static pages
   // if fallback is true it will download it's content then will be cached for the next user thru the cdn
-  const paths = cafeteriaData.map(cafe => {
+  const cafeterias = await fetchCafeterias();
+  const paths = cafeterias.map((cafe: { fsq_id: string }) => {
     return {
       params: {
-        id: cafe.id.toString(),
+        id: cafe.fsq_id,
       }
     }
   });

@@ -8,7 +8,7 @@ import React from 'react';
 import { fetchCafeterias } from '../lib/cafeterias_lib';
 
 export interface ICafeterias {
-  id: number;
+  fsq_id: number;
   name: string;
   imgUrl?: string;
   website: string;
@@ -42,7 +42,7 @@ const Home: NextPage = (props: InferGetStaticPropsType<typeof getStaticProps>) =
         <div className={styles.cardLayout}>
           {
             props.cafeterias.map((cafeteria: ICafeterias) => (
-              <Card key={`${cafeteria.id}`} imgUrl={cafeteria.imgUrl || 'https://cdn.pixabay.com/photo/2016/04/12/11/19/coffee-1324126_960_720.jpg'} name={cafeteria.name} href={`/cafeteria/${cafeteria.id}`} />
+              <Card key={`${cafeteria.fsq_id}`} imgUrl={cafeteria.imgUrl || 'https://cdn.pixabay.com/photo/2016/04/12/11/19/coffee-1324126_960_720.jpg'} name={cafeteria.name} href={`/cafeteria/${cafeteria.fsq_id}`} />
             ))
           }
         </div>
