@@ -15,7 +15,7 @@ const Cafeteria: NextPage = ({cafeteria}: InferGetStaticPropsType<typeof getStat
   //destructuring happpens incase of the router fallback / rendering data for the 1st time
   console.log(cafeteria);
 
-  const { name, location }: ICafeterias = cafeteria;
+  const { name, location, imgUrl } = cafeteria;
 
   const handleUpVoteBtn = () => {
     console.log("handle upvt")
@@ -30,7 +30,7 @@ const Cafeteria: NextPage = ({cafeteria}: InferGetStaticPropsType<typeof getStat
           <div className={styles.col1}>
             <div className={styles.linkVolver}>
             <Link href='/'>
-              <a>Volver</a>
+              <a>⬅ Volver</a>
             </Link>
             </div>
             <div className={styles.titleWrpr}>
@@ -41,7 +41,7 @@ const Cafeteria: NextPage = ({cafeteria}: InferGetStaticPropsType<typeof getStat
             height={360} 
             className={styles.storeImg} 
             alt={name}
-            src={'https://cdn.pixabay.com/photo/2016/04/12/11/19/coffee-1324126_960_720.jpg'}
+            src={imgUrl || 'https://cdn.pixabay.com/photo/2016/04/12/11/19/coffee-1324126_960_720.jpg'}
             />
           </div>
           <div className={cls('glass',styles.col2)}>
