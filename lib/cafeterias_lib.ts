@@ -1,7 +1,7 @@
 import { createApi } from "unsplash-js";
 
 const unsplashServerApi = createApi({
-  accessKey: `${process.env.UNSPLASH_ACCESS_KEY}`,
+  accessKey: `${process.env.NEXT_PUBLIC_UNSPLASH_ACCESS_KEY}`,
 });
 
 const urlCafeterias = (latLong: string, limite: Number, query: string) => {
@@ -11,8 +11,7 @@ const urlCafeterias = (latLong: string, limite: Number, query: string) => {
 const fotosCafeterias = async () => {
   const photos = await unsplashServerApi.search.getPhotos({
     query: "coffee shop",
-    page: 1,
-    perPage: 10,
+    perPage: 40,
     orientation: "landscape",
   });
 
@@ -21,19 +20,22 @@ const fotosCafeterias = async () => {
   return unsplashResults.map((res) => res.urls["regular"]);
 };
 
-export const fetchCafeterias = async () => {
+export const fetchCafeterias = async (
+  latLong: string = "39.47156679883213%2C-0.37647716672590537",
+  limite: number = 6
+) => {
   const photos = await fotosCafeterias();
 
   const options = {
     method: "GET",
     headers: {
       Accept: "application/json",
-      Authorization: `${process.env.FOURSQUARE_API_KEY}`,
+      Authorization: `${process.env.NEXT_PUBLIC_FOURSQUARE_API_KEY}`,
     },
   };
 
   const response = await fetch(
-    urlCafeterias("39.47156679883213%2C-0.37647716672590537", 6, "coffee"),
+    urlCafeterias(latLong, limite, "coffee"),
     options
   );
   const { results } = await response.json();

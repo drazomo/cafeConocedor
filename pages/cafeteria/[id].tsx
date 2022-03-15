@@ -13,7 +13,6 @@ const Cafeteria: NextPage = ({cafeteria}: InferGetStaticPropsType<typeof getStat
   // fallback version if page is rendered for first time
   {router.isFallback && <div>Loading...</div>}
   //destructuring happpens incase of the router fallback / rendering data for the 1st time
-  console.log(cafeteria);
 
   const { name, location, imgUrl } = cafeteria;
 

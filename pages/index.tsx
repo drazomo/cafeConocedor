@@ -4,7 +4,7 @@ import Image from 'next/image'
 import styles from '../styles/Home.module.css'
 import Banner from '../components/banner';
 import Card from '../components/card';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { fetchCafeterias } from '../lib/cafeterias_lib';
 import useTrackLocation from '../hooks/use-track-location'
 
@@ -22,7 +22,26 @@ export interface ICafeterias {
 const Home: NextPage = (props: InferGetStaticPropsType<typeof getStaticProps>) => {
   const { handleTrackLocation, latLong, locationErrorMsg, isFindingLocation } = useTrackLocation();
 
-  console.log(latLong, locationErrorMsg);
+  const [cafesUbicadas, setCafesUbicadas] = useState<ICafeterias[]>([]);
+  const [cafesUbicadasError, setCafesUbicadasError] = useState<any>(null);
+
+  useEffect(() => {
+
+    const fetchLocation = async() => {
+      if (latLong) {
+      try {
+        const cafeterias: ICafeterias[] = await fetchCafeterias(latLong, 30);
+        setCafesUbicadas(cafeterias);
+      } catch (error: any) {
+        console.error({error});
+        setCafesUbicadasError(error.message);
+      }
+    }
+  }
+
+  fetchLocation();
+
+  }, [latLong]);
 
   const handleBannerClick = () => {
     alert('Ciao! Banner!');
@@ -40,9 +59,23 @@ const Home: NextPage = (props: InferGetStaticPropsType<typeof getStaticProps>) =
       <main className={styles.main}>
         <Banner buttonText={isFindingLocation ? 'Cargando...' : 'Cafeterias cerca de mi'} handleOnClick={handleBannerClick} />
         {locationErrorMsg && <p>Something went wrong: { locationErrorMsg }</p>}
+        {cafesUbicadasError && <p>Something went wrong: { cafesUbicadasError }</p>}
         <div className={styles.heroImage}>
           <Image alt='cafeteria hero image' src='/static/hero-img.png' width={700} height={400}/>
         </div>
+        {cafesUbicadas.length > 0 && 
+        <div className={styles.sectionWrapper}>
+        <h2 className={styles.heading2}>Cafeterias cerca de mí</h2>
+        <div className={styles.cardLayout}>
+          {
+            cafesUbicadas.map((cafeteria) => (
+              <Card key={`${cafeteria.fsq_id}`} imgUrl={cafeteria.imgUrl || 'https://cdn.pixabay.com/photo/2016/04/12/11/19/coffee-1324126_960_720.jpg'} name={cafeteria.name} href={`/cafeteria/${cafeteria.fsq_id}`} />
+            ))
+          }
+        </div>
+        </div>
+        }
+
         {props.cafeterias.length > 0 && 
         <div className={styles.sectionWrapper}>
         <h2 className={styles.heading2}>Cafeterias en Valencia</h2>
