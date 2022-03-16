@@ -33,7 +33,8 @@ const Home: NextPage = (props: InferGetStaticPropsType<typeof getStaticProps>) =
     const fetchLocation = async() => {
       if (latLong) {
       try {
-        const cafeterias: ICafeterias[] = await fetchCafeterias(latLong, 30);
+        const cafeterias = await (await fetch(`/api/getCafesByUbicacion?latLong=${latLong}&limite=30`))
+        .json();
         // setCafesUbicadas(cafeterias);
         dispatch({
           type: ActionTypes.SET_CAFETERIAS,

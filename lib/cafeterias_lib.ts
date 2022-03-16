@@ -4,7 +4,7 @@ const unsplashServerApi = createApi({
   accessKey: `${process.env.NEXT_PUBLIC_UNSPLASH_ACCESS_KEY}`,
 });
 
-const urlCafeterias = (latLong: string, limite: Number, query: string) => {
+const urlCafeterias = (latLong: string, limite: string, query: string) => {
   return `https://api.foursquare.com/v3/places/search?query=${query}&ll=${latLong}&radius=9500&limit=${limite}`;
 };
 
@@ -22,7 +22,7 @@ const fotosCafeterias = async () => {
 
 export const fetchCafeterias = async (
   latLong: string = "39.47156679883213%2C-0.37647716672590537",
-  limite: number = 6
+  limite: string = "6"
 ) => {
   const photos = await fotosCafeterias();
 
