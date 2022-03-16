@@ -76,6 +76,7 @@ const Home: NextPage = (props: InferGetStaticPropsType<typeof getStaticProps>) =
         </div>
         }
 
+        {/* Pre-rendered data from CDN */}
         {props.cafeterias.length > 0 && 
         <div className={styles.sectionWrapper}>
         <h2 className={styles.heading2}>Cafeterias en Valencia</h2>

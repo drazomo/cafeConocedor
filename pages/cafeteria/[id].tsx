@@ -75,9 +75,10 @@ export const getStaticProps: GetStaticProps = async (context) => {
   // signifies ! that the params will not be undefined && number converted to str for type capability
   const paramsId = context.params!.id;
   const cafeterias: ICafeterias[] = await fetchCafeterias();
+  const findCafesById = cafeterias.find((local: { fsq_id: string }) => (local.fsq_id === paramsId))
 
   return {props: {
-    cafeteria: cafeterias.find((local: { fsq_id: string }) => (local.fsq_id === paramsId))
+    cafeteria: findCafesById ? findCafesById : {}
   }}
 
 };
