@@ -40,13 +40,20 @@ const storeReducer = (state: {latLong: string, cafeterias: ICafeterias[]}, actio
   }
 }
 
-const StoreCtx = createContext<AppCtxInterface | {}>({});
+const initialState = {
+  latLong: '',
+  cafeterias: [],
+};
+
+export const StoreCtx = createContext<{
+  state: AppCtxInterface;
+  dispatch: React.Dispatch<setLatLongAction | setCafteriasAction>;
+}>({
+  state: initialState,
+  dispatch: () => null
+});
 
 const StoreProvider = ({ children }: StoreProvdrProps ): React.ReactElement => {
-  const initialState = {
-    latLong: '',
-    cafeterias: [],
-  };
 
   const [ state, dispatch ] = useReducer(storeReducer, initialState);
 
