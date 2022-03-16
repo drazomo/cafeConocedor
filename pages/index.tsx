@@ -7,7 +7,7 @@ import Card from '../components/card';
 import React, { useContext, useEffect, useState } from 'react';
 import { fetchCafeterias } from '../lib/cafeterias_lib';
 import useTrackLocation from '../hooks/use-track-location'
-import { ActionTypes, StoreCtx } from './_app';
+import { ActionTypes, StoreCtx } from '../store/storeCtx';
 
 export interface ICafeterias {
   fsq_id: string;

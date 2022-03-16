@@ -1,5 +1,5 @@
 import { useContext, useState } from "react";
-import { ActionTypes, StoreCtx } from "../pages/_app";
+import { ActionTypes, StoreCtx } from "../store/storeCtx";
 
 const useTrackLocation = () => {
   const { dispatch } = useContext(StoreCtx);

@@ -7,6 +7,7 @@ import Image from 'next/image';
 import cls from 'classnames';
 import { fetchCafeterias } from '../../lib/cafeterias_lib';
 import { ICafeterias } from '..';
+import { StoreCtx } from '../../store/storeCtx';
 
 const Cafeteria: NextPage = ({cafeteria}: InferGetStaticPropsType<typeof getStaticProps>) => {
   const router = useRouter();
