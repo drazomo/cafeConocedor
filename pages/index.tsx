@@ -13,10 +13,8 @@ export interface ICafeterias {
   fsq_id: string;
   name: string;
   imgUrl?: string;
-  location: {
-    address?: string;
-    neighborhood?: string;
-  }
+  address?: string;
+  neighborhood?: string;
 }
 
 //CLIENT

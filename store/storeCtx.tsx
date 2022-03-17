@@ -52,7 +52,7 @@ const storeReducer = (state: {latLong: string, cafeterias: ICafeterias[]}, actio
   }
 }
 
-const StoreProvider = ({ children }: StoreProvdrProps ): React.ReactElement => {
+const StoreProvider = ({ children }: StoreProvdrProps ) => {
 
   const [ state, dispatch ] = useReducer(storeReducer, initialState);
 

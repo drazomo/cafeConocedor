@@ -1,4 +1,4 @@
-import type { GetStaticPathsResult, GetStaticProps, InferGetStaticPropsType, NextPage } from 'next'
+import type { GetStaticPathsResult, GetStaticProps, GetStaticPropsContext, InferGetStaticPropsType, NextPage, PreviewData } from 'next'
 import Head from 'next/head';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
@@ -7,81 +7,25 @@ import Image from 'next/image';
 import cls from 'classnames';
 import { fetchCafeterias } from '../../lib/cafeterias_lib';
 import { ICafeterias } from '..';
+import { useContext, useEffect, useState } from 'react';
+import { StoreCtx } from '../../store/storeCtx';
+import { isEmpty } from '../../utils';
+import { ParsedUrlQuery } from 'querystring';
 
-const Cafeteria: NextPage = ({cafeteria}: InferGetStaticPropsType<typeof getStaticProps>) => {
-  const router = useRouter();
-  // fallback version if page is rendered for first time
-  {router.isFallback && <div>Loading...</div>}
-  //destructuring happpens incase of the router fallback / rendering data for the 1st time
 
-  const { name, location, imgUrl } = cafeteria;
 
-  const handleUpVoteBtn = () => {
-    console.log("handle upvt")
-  };
-
-  return (
-    <div className={styles.layout}>
-      <Head>
-        <title>{name}</title>
-      </Head>
-        <div className={styles.container}>
-          <div className={styles.col1}>
-            <div className={styles.linkVolver}>
-            <Link href='/'>
-              <a>⬅ Volver</a>
-            </Link>
-            </div>
-            <div className={styles.titleWrpr}>
-              <h1 className={styles.cafeName}>{name}</h1>
-            </div>
-            <Image 
-            width={600} 
-            height={360} 
-            className={styles.storeImg} 
-            alt={name}
-            src={imgUrl || 'https://cdn.pixabay.com/photo/2016/04/12/11/19/coffee-1324126_960_720.jpg'}
-            />
-          </div>
-          <div className={cls('glass',styles.col2)}>
-            <div className={styles.icnWrpr}>
-              <Image src='/static/icons/sitios.svg' width={24} height={24} alt='icon domicillo'/>
-              <p className={styles.icnText}>{location.address}</p>
-            </div>
-            {
-            location.neighborhood && 
-            <div className={styles.icnWrpr}>
-              <Image src='/static/icons/cerca_de_mi.svg' width={24} height={24} alt='icon zona'/>
-              <p className={styles.icnText}>{location.neighborhood}</p>
-            </div>
-            }
-            <div className={styles.icnWrpr}>
-              <Image src='/static/icons/estrella.svg' width={24} height={24} alt='icon likes'/>
-              <p className={styles.icnText}>1</p>
-            </div> 
-            <button className={styles.upVoteBtn} onClick={handleUpVoteBtn}>
-              Up Vote
-            </button>
-            <p>{location.address}</p>
-            <p>{name}</p>
-            {location.neighborhood && <p>{location.neighborhood[0]}</p>}
-          </div>
-        </div>
-    </div>
-  )
-};
-
-export const getStaticProps: GetStaticProps = async (context) => {
+export async function getStaticProps(context: GetStaticPropsContext<ParsedUrlQuery, PreviewData>) {
   // signifies ! that the params will not be undefined && number converted to str for type capability
   const paramsId = context.params!.id;
   const cafeterias: ICafeterias[] = await fetchCafeterias();
-  const findCafesById = cafeterias.find((local: { fsq_id: string }) => (local.fsq_id === paramsId))
+  const findCafesById = cafeterias.find((local: { fsq_id: string }) => { return local.fsq_id.toString() === paramsId});
 
-  return {props: {
-    cafeteria: findCafesById ? findCafesById : {}
-  }}
-
-};
+  return {
+    props: {
+      cafeteria: findCafesById ? findCafesById : {},
+    },
+  };
+}
 
 export const getStaticPaths = async({}): Promise<GetStaticPathsResult> => {
   // fallback false => 404 error v
@@ -91,7 +35,7 @@ export const getStaticPaths = async({}): Promise<GetStaticPathsResult> => {
   const paths = cafeterias.map((cafe: { fsq_id: string }) => {
     return {
       params: {
-        id: cafe.fsq_id,
+        id: cafe.fsq_id.toString(),
       }
     }
   });
@@ -102,4 +46,99 @@ export const getStaticPaths = async({}): Promise<GetStaticPathsResult> => {
   }
 }
 
+
+const Cafeteria = ({cafeteria}: InferGetStaticPropsType<typeof getStaticProps>) => {
+  const router = useRouter();
+  const fsq_id = router.query.id;
+  const [ cafeStore, setCafeStore ] = useState<ICafeterias>(cafeteria as ICafeterias);
+  const { state : { cafeterias }} = useContext(StoreCtx);
+
+  const handleCreateCafeStore = async (data: ICafeterias) => {
+    try {
+      const response = await fetch (`/api/createCafeStore`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data)
+      });
+
+      const dbCafeStore = response.json();
+      console.log(dbCafeStore);
+    } catch (error: any) {
+      throw new Error('error creating cafe store', error)
+    }
+  }
+
+  useEffect(() => {
+    if(isEmpty(cafeteria)) {
+      if (cafeterias.length > 0) {
+        const cafeDeCtx = cafeterias.find((cafe) => cafe.fsq_id.toString() === fsq_id);
+        
+        if(cafeDeCtx) {
+          setCafeStore(cafeDeCtx);
+          handleCreateCafeStore(cafeDeCtx);
+        }
+      }
+    }
+  }, [cafeStore, cafeterias, fsq_id, cafeteria])
+  // fallback version if page is rendered for first time
+  {router.isFallback && <div>Loading...</div>}
+  //destructuring happpens incase of the router fallback / rendering data for the 1st time
+ 
+  console.log(cafeStore);
+
+  const handleUpVoteBtn = () => {
+    console.log("handle upvt")
+  };
+
+  return (
+    <div className={styles.layout}>
+      <Head>
+        <title>{cafeStore.name}</title>
+      </Head>
+        <div className={styles.container}>
+          <div className={styles.col1}>
+            <div className={styles.linkVolver}>
+            <Link href='/'>
+              <a>⬅ Volver</a>
+            </Link>
+            </div>
+            <div className={styles.titleWrpr}>
+              <h1 className={styles.cafeName}>{cafeStore.name}</h1>
+            </div>
+            <Image 
+            width={600} 
+            height={360} 
+            className={styles.storeImg} 
+            alt={cafeStore.name}
+            src={cafeStore.imgUrl || 'https://cdn.pixabay.com/photo/2016/04/12/11/19/coffee-1324126_960_720.jpg'}
+            />
+          </div>
+          <div className={cls('glass',styles.col2)}>
+            <div className={styles.icnWrpr}>
+              <Image src='/static/icons/sitios.svg' width={24} height={24} alt='icon domicillo'/>
+              <p className={styles.icnText}>{cafeStore.address}</p>
+            </div>
+            {
+            cafeStore.neighborhood && 
+            <div className={styles.icnWrpr}>
+              <Image src='/static/icons/cerca_de_mi.svg' width={24} height={24} alt='icon zona'/>
+              <p className={styles.icnText}>{cafeStore.neighborhood}</p>
+            </div>
+            }
+            <div className={styles.icnWrpr}>
+              <Image src='/static/icons/estrella.svg' width={24} height={24} alt='icon likes'/>
+              <p className={styles.icnText}>1</p>
+            </div> 
+            <button className={styles.upVoteBtn} onClick={handleUpVoteBtn}>
+              Up Vote
+            </button>
+            <p>{cafeStore.address}</p>
+            <p>{cafeStore.name}</p>
+            {cafeStore.neighborhood && <p>{cafeStore.neighborhood[0]}</p>}
+          </div>
+        </div>
+    </div>
+  )
+};
 export default Cafeteria;
