@@ -18,7 +18,7 @@ export interface ICafeterias {
 }
 
 //CLIENT
-const Home: NextPage = (props: InferGetStaticPropsType<typeof getStaticProps>) => {
+const Home = (props: InferGetStaticPropsType<typeof getStaticProps>) => {
   const { dispatch, state } = useContext(StoreCtx);
   const { cafeterias, latLong } = state;
   const { handleTrackLocation, locationErrorMsg, isFindingLocation } = useTrackLocation();
@@ -31,8 +31,7 @@ const Home: NextPage = (props: InferGetStaticPropsType<typeof getStaticProps>) =
     const fetchLocation = async() => {
       if (latLong) {
       try {
-        const cafeterias = await (await fetch(`/api/getCafesByUbicacion?latLong=${latLong}&limite=30`))
-        .json();
+        const cafeterias = await (await fetch(`/api/getCafesByUbicacion?latLong=${latLong}&limite=30`)).json();
         // setCafesUbicadas(cafeterias);
         dispatch({
           type: ActionTypes.SET_CAFETERIAS,
@@ -73,7 +72,7 @@ const Home: NextPage = (props: InferGetStaticPropsType<typeof getStaticProps>) =
         <h2 className={styles.heading2}>Cafeterias cerca de mí</h2>
         <div className={styles.cardLayout}>
           {
-            cafeterias.map((cafeteria) => (
+            cafeterias?.map((cafeteria) => (
               <Card key={`${cafeteria.fsq_id}`} imgUrl={cafeteria.imgUrl || 'https://cdn.pixabay.com/photo/2016/04/12/11/19/coffee-1324126_960_720.jpg'} name={cafeteria.name} href={`/cafeteria/${cafeteria.fsq_id}`} />
             ))
           }
@@ -102,7 +101,6 @@ const Home: NextPage = (props: InferGetStaticPropsType<typeof getStaticProps>) =
 // SERVER
 export const getStaticProps: GetStaticProps = async () => {
   const cafeterias: ICafeterias[] = await fetchCafeterias();
-
   return {
     props: {
       cafeterias

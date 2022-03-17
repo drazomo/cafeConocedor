@@ -41,15 +41,28 @@ export const fetchCafeterias = async (
   const { results } = await response.json();
 
   //idx of every result
-  return results.map(
+  return results?.map(
     (
-      result: { location: { address: string; neighborhood: string } },
+      result: {
+        location: {
+          neighborhood: string;
+          address: string;
+          cross_street: string;
+        };
+        fsq_id: string;
+        name: string;
+      },
       idx: number
     ) => {
+      const neighborhood = result.location.neighborhood;
       return {
-        ...result,
-        address: result.location.address,
-        neighborhood: result.location.neighborhood,
+        fsq_id: result.fsq_id,
+        address: result.location?.address || "",
+        name: result.name,
+        neighborhood:
+          (neighborhood && neighborhood.length > 0 && neighborhood[0]) ||
+          result.location.cross_street ||
+          "",
         imgUrl: photos[idx],
       };
     }

@@ -4,9 +4,9 @@ export interface RecordFields {
   fsq_id: string;
   name: string;
   totalVotes: number;
-  address: string;
-  neighborhood: string;
-  imgUrl: string;
+  address?: string;
+  neighborhood?: string;
+  imgUrl?: string;
 }
 
 const base = new Airtable({ apiKey: process.env.AIRTABLE_API_KEY }).base(

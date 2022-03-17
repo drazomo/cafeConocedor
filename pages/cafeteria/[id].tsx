@@ -87,6 +87,8 @@ const Cafeteria = ({cafeteria}: InferGetStaticPropsType<typeof getStaticProps>) 
  
   console.log(cafeStore);
 
+  const { name, address, neighborhood, imgUrl, } = cafeStore;
+
   const handleUpVoteBtn = () => {
     console.log("handle upvt")
   };
@@ -94,7 +96,7 @@ const Cafeteria = ({cafeteria}: InferGetStaticPropsType<typeof getStaticProps>) 
   return (
     <div className={styles.layout}>
       <Head>
-        <title>{cafeStore.name}</title>
+        <title>{name}</title>
       </Head>
         <div className={styles.container}>
           <div className={styles.col1}>
@@ -104,26 +106,26 @@ const Cafeteria = ({cafeteria}: InferGetStaticPropsType<typeof getStaticProps>) 
             </Link>
             </div>
             <div className={styles.titleWrpr}>
-              <h1 className={styles.cafeName}>{cafeStore.name}</h1>
+              <h1 className={styles.cafeName}>{name}</h1>
             </div>
             <Image 
             width={600} 
             height={360} 
             className={styles.storeImg} 
-            alt={cafeStore.name}
-            src={cafeStore.imgUrl || 'https://cdn.pixabay.com/photo/2016/04/12/11/19/coffee-1324126_960_720.jpg'}
+            alt={name}
+            src={imgUrl || 'https://cdn.pixabay.com/photo/2016/04/12/11/19/coffee-1324126_960_720.jpg'}
             />
           </div>
           <div className={cls('glass',styles.col2)}>
             <div className={styles.icnWrpr}>
               <Image src='/static/icons/sitios.svg' width={24} height={24} alt='icon domicillo'/>
-              <p className={styles.icnText}>{cafeStore.address}</p>
+              <p className={styles.icnText}>{address}</p>
             </div>
             {
-            cafeStore.neighborhood && 
+            neighborhood && 
             <div className={styles.icnWrpr}>
               <Image src='/static/icons/cerca_de_mi.svg' width={24} height={24} alt='icon zona'/>
-              <p className={styles.icnText}>{cafeStore.neighborhood}</p>
+              <p className={styles.icnText}>{neighborhood}</p>
             </div>
             }
             <div className={styles.icnWrpr}>
@@ -133,9 +135,9 @@ const Cafeteria = ({cafeteria}: InferGetStaticPropsType<typeof getStaticProps>) 
             <button className={styles.upVoteBtn} onClick={handleUpVoteBtn}>
               Up Vote
             </button>
-            <p>{cafeStore.address}</p>
-            <p>{cafeStore.name}</p>
-            {cafeStore.neighborhood && <p>{cafeStore.neighborhood[0]}</p>}
+            <p>{address}</p>
+            <p>{name}</p>
+            {neighborhood && <p>{neighborhood[0]}</p>}
           </div>
         </div>
     </div>
