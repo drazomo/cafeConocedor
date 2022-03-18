@@ -59,7 +59,7 @@ const Cafeteria = ({cafeteria}: InferGetStaticPropsType<typeof getStaticProps>) 
         method: 'POST',
         headers: { 'Content-Type': 'application/json',
       },
-      body: JSON.stringify(data)
+      body: JSON.stringify({fsq_id, name, totalVotes: 0, imgUrl, neighborhood: neighborhood || '', address: address || ''})
       });
 
       const dbCafeStore = response.json();
@@ -79,6 +79,9 @@ const Cafeteria = ({cafeteria}: InferGetStaticPropsType<typeof getStaticProps>) 
           handleCreateCafeStore(cafeDeCtx);
         }
       }
+    } else {
+      //SSG
+      handleCreateCafeStore(cafeteria as ICafeterias);
     }
   }, [cafeStore, cafeterias, fsq_id, cafeteria])
   // fallback version if page is rendered for first time
@@ -89,8 +92,11 @@ const Cafeteria = ({cafeteria}: InferGetStaticPropsType<typeof getStaticProps>) 
 
   const { name, address, neighborhood, imgUrl, } = cafeStore;
 
+  const [ votingCtn, setVotingCtn ] = useState(1);
+
   const handleUpVoteBtn = () => {
-    console.log("handle upvt")
+    let count = votingCtn + 1;
+    setVotingCtn(count);
   };
 
   return (
@@ -130,7 +136,7 @@ const Cafeteria = ({cafeteria}: InferGetStaticPropsType<typeof getStaticProps>) 
             }
             <div className={styles.icnWrpr}>
               <Image src='/static/icons/estrella.svg' width={24} height={24} alt='icon likes'/>
-              <p className={styles.icnText}>1</p>
+              <p className={styles.icnText}>{votingCtn}</p>
             </div> 
             <button className={styles.upVoteBtn} onClick={handleUpVoteBtn}>
               Up Vote

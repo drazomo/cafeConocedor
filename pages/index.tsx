@@ -15,6 +15,7 @@ export interface ICafeterias {
   imgUrl?: string;
   address?: string;
   neighborhood?: string;
+  totalVotes: number;
 }
 
 //CLIENT

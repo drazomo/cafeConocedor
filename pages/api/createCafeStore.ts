@@ -1,6 +1,5 @@
-import { FieldSet, Records } from "airtable";
 import { NextApiRequest, NextApiResponse } from "next";
-import { getMinifiedRecords, table } from "../../lib/airtable";
+import { findRecordByFilter, table } from "../../lib/airtable";
 
 const createCafeStore = async (req: NextApiRequest, res: NextApiResponse) => {
   if (req.method === "POST") {
@@ -8,16 +7,10 @@ const createCafeStore = async (req: NextApiRequest, res: NextApiResponse) => {
       req.body;
     //find a record
     try {
-      if (fsq_id) {
-        const findCafeStoreRecords: Records<FieldSet> | any = await table
-          .select({
-            filterByFormula: `fsq_id="${fsq_id}"`,
-          })
-          .firstPage();
+      if (fsq_id as string) {
+        const records = await findRecordByFilter(fsq_id as string);
 
-        if (findCafeStoreRecords.length !== 0) {
-          const records = getMinifiedRecords(findCafeStoreRecords);
-
+        if (records.length !== 0) {
           res.json(records);
         } else {
           //create a record

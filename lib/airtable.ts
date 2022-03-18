@@ -1,4 +1,4 @@
-import Airtable from "airtable";
+import Airtable, { FieldSet, Records } from "airtable";
 
 export interface RecordFields {
   fsq_id: string;
@@ -25,4 +25,14 @@ const getMinifiedRecords = (records: []) => {
   return records.map((record) => getMinifiedRecord(record));
 };
 
-export { table, getMinifiedRecords };
+const findRecordByFilter = async (id: string) => {
+  const findCafeStoreRecords: Records<FieldSet> | any = await table
+    .select({
+      filterByFormula: `fsq_id="${id}"`,
+    })
+    .firstPage();
+
+  return getMinifiedRecords(findCafeStoreRecords);
+};
+
+export { table, getMinifiedRecords, findRecordByFilter };
