@@ -13,9 +13,9 @@ export const getCafesByUbicacion = async (
     const response = await fetchCafeterias(latLong as string, limite as string);
 
     res.status(200).json(response);
-  } catch (error: any) {
-    res.status(500).json({ message: "ohhh ohh", error });
-    throw new Error("there is an error", error);
+  } catch (error) {
+    res.status(500).json({ message: "BE: Location Error", error: error });
+    throw new Error("there is an error", error as Error);
   }
 };
 

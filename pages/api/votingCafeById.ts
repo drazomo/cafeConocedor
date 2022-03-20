@@ -16,8 +16,8 @@ const votingCafeById = async (req: NextApiRequest, res: NextApiResponse) => {
       }
 
       res.json({ id });
-    } catch (err: any) {
-      throw new Error(err);
+    } catch (err) {
+      throw new Error("BE: Voting Error", err as Error);
     }
   }
 };

@@ -24,7 +24,7 @@ const getMinifiedRecord = (record: { id: any; fields: any }) => {
   };
 };
 
-const getMinifiedRecords = (records: any[] | Records<FieldSet>) => {
+const getMinifiedRecords = (records: Records<FieldSet>) => {
   return records.map((record) => getMinifiedRecord(record));
 };
 

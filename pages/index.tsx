@@ -38,9 +38,9 @@ const Home = (props: InferGetStaticPropsType<typeof getStaticProps>) => {
           type: ActionTypes.SET_CAFETERIAS,
           payload: {cafeterias}
         })
-      } catch (error: any) {
-        console.error({error});
-        setCafesUbicadasError(error.message);
+      } catch (error) {
+        setCafesUbicadasError((error as Error).message);
+        throw new Error('location fetch error', error as Error);
       }
     }
   }

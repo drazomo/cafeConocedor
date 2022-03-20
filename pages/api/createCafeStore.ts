@@ -19,7 +19,7 @@ const createCafeStore = async (req: NextApiRequest, res: NextApiResponse) => {
         } else {
           //create a record
           if (name) {
-            const createRecords: any = await table.create([
+            const createRecords = await table.create([
               {
                 fields: {
                   fsq_id,
@@ -41,11 +41,11 @@ const createCafeStore = async (req: NextApiRequest, res: NextApiResponse) => {
       } else {
         res.status(400).json({ message: "id is missing" });
       }
-    } catch (error: any) {
+    } catch (error) {
       res
         .status(500)
         .json({ message: "error creating or finding store", error });
-      throw new Error(error);
+      throw new Error("error creating or finding store", error as Error);
     }
   }
 };

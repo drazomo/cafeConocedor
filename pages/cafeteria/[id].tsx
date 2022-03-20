@@ -69,9 +69,8 @@ const Cafeteria = (initialProps: InferGetStaticPropsType<typeof getStaticProps>)
         }),
       });
       const dbCoffeeStore = await response.json();
-      console.log('retrieve from FE', dbCoffeeStore);
     } catch (err) {
-      console.error("Error creating coffee store", err);
+      throw new Error('Error creating coffee store', err as Error)
     }
   };
 
@@ -107,7 +106,7 @@ const Cafeteria = (initialProps: InferGetStaticPropsType<typeof getStaticProps>)
   // fallback version if page is rendered for first time
   {router.isFallback && <div>Loading...</div>}
 
-  console.log('data from swr', data, data?.totalVotes);
+//  console.log('data from swr', data[0]?.totalVotes);
   
 
   const handleUpVoteBtn = async () => {
@@ -125,9 +124,8 @@ const Cafeteria = (initialProps: InferGetStaticPropsType<typeof getStaticProps>)
         let count = votingCtn + 1;
         setVotingCtn(count);
       }
-      console.log('from airtable: update upvt', {dbCafeStore});
-    } catch (error: any) {
-      throw new Error('error upving cafeteria', error)
+    } catch (error) {
+      throw new Error('error upving cafeteria', error as Error)
     }
   };
 
