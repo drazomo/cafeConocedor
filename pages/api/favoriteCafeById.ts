@@ -1,3 +1,4 @@
+import { FieldSet } from "airtable/lib/field_set";
 import { NextApiRequest, NextApiResponse } from "next/types";
 import {
   findRecordByFilter,
@@ -10,14 +11,14 @@ const favoriteCafeById = async (req: NextApiRequest, res: NextApiResponse) => {
     try {
       const { fsq_id } = req.body;
       if (fsq_id) {
-        const records = await findRecordByFilter(fsq_id);
+        const records: any = await findRecordByFilter(fsq_id);
 
         if (records.length !== 0) {
           const record = records[0];
           const calculateVoting = record.totalVotes + 1;
 
           //update a record
-          const udpateRecord: any = await table.update([
+          const udpateRecord = await table.update([
             {
               id: record.recordId,
               fields: {

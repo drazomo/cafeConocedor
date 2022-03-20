@@ -25,7 +25,7 @@ const Home = (props: InferGetStaticPropsType<typeof getStaticProps>) => {
   const { handleTrackLocation, locationErrorMsg, isFindingLocation } = useTrackLocation();
 
   // const [cafesUbicadas, setCafesUbicadas] = useState<ICafeterias[]>([]);
-  const [cafesUbicadasError, setCafesUbicadasError] = useState<any>(null);
+  const [cafesUbicadasError, setCafesUbicadasError] = useState<Error>();
 
   useEffect(() => {
 
@@ -39,7 +39,7 @@ const Home = (props: InferGetStaticPropsType<typeof getStaticProps>) => {
           payload: {cafeterias}
         })
       } catch (error) {
-        setCafesUbicadasError((error as Error).message);
+        setCafesUbicadasError(error as Error);
         throw new Error('location fetch error', error as Error);
       }
     }
