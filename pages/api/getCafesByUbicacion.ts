@@ -15,7 +15,7 @@ export const getCafesByUbicacion = async (
     res.status(200).json(response);
   } catch (error) {
     res.status(500).json({ message: "BE: Location Error", error: error });
-    throw new Error("there is an error", error as Error);
+    throw new Error("there is an error obtaining location");
   }
 };
 

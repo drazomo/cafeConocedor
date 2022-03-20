@@ -45,7 +45,6 @@ const createCafeStore = async (req: NextApiRequest, res: NextApiResponse) => {
       res
         .status(500)
         .json({ message: "error creating or finding store", error });
-      throw new Error("error creating or finding store", error as Error);
     }
   }
 };

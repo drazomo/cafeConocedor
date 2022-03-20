@@ -70,7 +70,7 @@ const Cafeteria = (initialProps: InferGetStaticPropsType<typeof getStaticProps>)
       });
       const dbCoffeeStore = await response.json();
     } catch (err) {
-      throw new Error('Error creating coffee store', err as Error)
+      throw new Error('[id].tsx: Error creating coffee store')
     }
   };
 
@@ -125,7 +125,7 @@ const Cafeteria = (initialProps: InferGetStaticPropsType<typeof getStaticProps>)
         setVotingCtn(count);
       }
     } catch (error) {
-      throw new Error('error upving cafeteria', error as Error)
+      throw new Error('error upving cafeteria')
     }
   };
 

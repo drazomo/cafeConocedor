@@ -39,7 +39,7 @@ const favoriteCafeById = async (req: NextApiRequest, res: NextApiResponse) => {
       }
     } catch (error) {
       res.status(500);
-      throw new Error("error upvting cafe", error as Error);
+      throw new Error("error upvting cafe");
     }
   }
 };

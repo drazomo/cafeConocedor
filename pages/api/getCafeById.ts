@@ -18,7 +18,7 @@ const getCafeById = async (req: NextApiRequest, res: NextApiResponse) => {
     }
   } catch (error) {
     res.status(500).json({ message: error });
-    throw new Error("Something went wrong", error as Error);
+    throw new Error("Something went wrong obtaining error");
   }
 };
 
