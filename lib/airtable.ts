@@ -1,12 +1,14 @@
-import Airtable, { FieldSet, Records } from "airtable";
+import Airtable from "airtable";
+import { FieldSet } from "airtable/lib/field_set";
+import { Records } from "airtable/lib/records";
 
-export interface RecordFields {
+interface AirtableData {
+  address: string;
   fsq_id: string;
+  imgUrl: string;
   name: string;
+  recordId: string;
   totalVotes: number;
-  address?: string;
-  neighborhood?: string;
-  imgUrl?: string;
 }
 
 const base = new Airtable({ apiKey: process.env.AIRTABLE_API_KEY }).base(
@@ -15,18 +17,19 @@ const base = new Airtable({ apiKey: process.env.AIRTABLE_API_KEY }).base(
 
 const table = base("coffee-stores");
 
-const getMinifiedRecord = (record: { fields: RecordFields }) => {
+const getMinifiedRecord = (record: { id: any; fields: any }) => {
   return {
+    recordId: record.id,
     ...record.fields,
   };
 };
 
-const getMinifiedRecords = (records: []) => {
+const getMinifiedRecords = (records: any[] | Records<FieldSet>) => {
   return records.map((record) => getMinifiedRecord(record));
 };
 
 const findRecordByFilter = async (id: string) => {
-  const findCafeStoreRecords: Records<FieldSet> | any = await table
+  const findCafeStoreRecords = await table
     .select({
       filterByFormula: `fsq_id="${id}"`,
     })

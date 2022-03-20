@@ -1,5 +1,9 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { findRecordByFilter, table } from "../../lib/airtable";
+import {
+  findRecordByFilter,
+  getMinifiedRecords,
+  table,
+} from "../../lib/airtable";
 
 const createCafeStore = async (req: NextApiRequest, res: NextApiResponse) => {
   if (req.method === "POST") {
@@ -7,32 +11,29 @@ const createCafeStore = async (req: NextApiRequest, res: NextApiResponse) => {
       req.body;
     //find a record
     try {
-      if (fsq_id as string) {
-        const records = await findRecordByFilter(fsq_id as string);
+      if (fsq_id) {
+        const records = await findRecordByFilter(fsq_id);
 
         if (records.length !== 0) {
           res.json(records);
         } else {
           //create a record
           if (name) {
-            const createRecords = await table.create([
+            const createRecords: any = await table.create([
               {
                 fields: {
                   fsq_id,
                   name,
-                  totalVotes,
                   address,
                   neighborhood,
+                  totalVotes,
                   imgUrl,
                 },
               },
             ]);
-            const recordFields = createRecords.map((record) => {
-              return {
-                ...record.fields,
-              };
-            });
-            res.json({ message: "create a record", records: recordFields });
+
+            const records = getMinifiedRecords(createRecords);
+            res.json(records);
           } else {
             res.status(400).json({ message: "name is missing" });
           }

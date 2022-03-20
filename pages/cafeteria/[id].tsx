@@ -1,4 +1,4 @@
-import type { GetStaticPathsResult, GetStaticProps, GetStaticPropsContext, InferGetStaticPropsType, NextPage, PreviewData } from 'next'
+import type { GetStaticPathsResult, GetStaticPropsContext, InferGetStaticPropsType } from 'next'
 import Head from 'next/head';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
@@ -9,12 +9,10 @@ import { fetchCafeterias } from '../../lib/cafeterias_lib';
 import { ICafeterias } from '..';
 import { useContext, useEffect, useState } from 'react';
 import { StoreCtx } from '../../store/storeCtx';
-import { isEmpty } from '../../utils';
-import { ParsedUrlQuery } from 'querystring';
+import { isEmpty, fetcher } from '../../utils';
+import useSWR from 'swr';
 
-
-
-export async function getStaticProps(context: GetStaticPropsContext<ParsedUrlQuery, PreviewData>) {
+export async function getStaticProps(context: GetStaticPropsContext) {
   // signifies ! that the params will not be undefined && number converted to str for type capability
   const paramsId = context.params!.id;
   const cafeterias: ICafeterias[] = await fetchCafeterias();
@@ -27,7 +25,7 @@ export async function getStaticProps(context: GetStaticPropsContext<ParsedUrlQue
   };
 }
 
-export const getStaticPaths = async({}): Promise<GetStaticPathsResult> => {
+export const getStaticPaths = async(): Promise<GetStaticPathsResult> => {
   // fallback false => 404 error v
   // fallback true => best if you have a lot of static pages
   // if fallback is true it will download it's content then will be cached for the next user thru the cdn
@@ -47,30 +45,38 @@ export const getStaticPaths = async({}): Promise<GetStaticPathsResult> => {
 }
 
 
-const Cafeteria = ({cafeteria}: InferGetStaticPropsType<typeof getStaticProps>) => {
+const Cafeteria = (initialProps: InferGetStaticPropsType<typeof getStaticProps>) => {
   const router = useRouter();
   const fsq_id = router.query.id;
-  const [ cafeStore, setCafeStore ] = useState<ICafeterias>(cafeteria as ICafeterias);
+  const [ cafeStore, setCafeStore ] = useState<ICafeterias>(initialProps.cafeteria as ICafeterias || {});
   const { state : { cafeterias }} = useContext(StoreCtx);
 
-  const handleCreateCafeStore = async (data: ICafeterias) => {
+  const handleCreateCafeStore = async (coffeeStore: ICafeterias) => {
     try {
-      const response = await fetch (`/api/createCafeStore`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({fsq_id, name, totalVotes: 0, imgUrl, neighborhood: neighborhood || '', address: address || ''})
+      const { fsq_id, name, totalVotes, imgUrl, neighborhood, address } = coffeeStore;
+      const response = await fetch("/api/createCafeStore", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          fsq_id,
+          name,
+          totalVotes: 0,
+          imgUrl,
+          neighborhood: neighborhood || "",
+          address: address || "",
+        }),
       });
-
-      const dbCafeStore = response.json();
-      console.log(dbCafeStore);
-    } catch (error: any) {
-      throw new Error('error creating cafe store', error)
+      const dbCoffeeStore = await response.json();
+      console.log('retrieve from FE', dbCoffeeStore);
+    } catch (err) {
+      console.error("Error creating coffee store", err);
     }
-  }
+  };
 
   useEffect(() => {
-    if(isEmpty(cafeteria)) {
+    if(isEmpty(initialProps.cafeteria)) {
       if (cafeterias.length > 0) {
         const cafeDeCtx = cafeterias.find((cafe) => cafe.fsq_id.toString() === fsq_id);
         
@@ -81,23 +87,54 @@ const Cafeteria = ({cafeteria}: InferGetStaticPropsType<typeof getStaticProps>) 
       }
     } else {
       //SSG
-      handleCreateCafeStore(cafeteria as ICafeterias);
+      handleCreateCafeStore(initialProps.cafeteria as ICafeterias);
     }
-  }, [cafeStore, cafeterias, fsq_id, cafeteria])
+  }, [initialProps, cafeterias, fsq_id, initialProps.cafeteria])
+  //destructuring happpens incase of the router fallback / rendering data for the 1st time
+  
+  const { name = '', address = '', neighborhood = '', imgUrl = '' } = cafeStore;
+  const [ votingCtn, setVotingCtn ] = useState(0);
+
+  const { data, error } = useSWR(`/api/getCafeById?id=${fsq_id}`, fetcher);
+
+  useEffect(() => {
+    if (data && data.length > 0) {
+      setCafeStore(data[0]);
+      setVotingCtn(data[0].totalVotes);
+    }
+  }, [data]);
+
   // fallback version if page is rendered for first time
   {router.isFallback && <div>Loading...</div>}
-  //destructuring happpens incase of the router fallback / rendering data for the 1st time
- 
-  console.log(cafeStore);
 
-  const { name, address, neighborhood, imgUrl, } = cafeStore;
+  console.log('data from swr', data, data?.totalVotes);
+  
 
-  const [ votingCtn, setVotingCtn ] = useState(1);
+  const handleUpVoteBtn = async () => {
 
-  const handleUpVoteBtn = () => {
-    let count = votingCtn + 1;
-    setVotingCtn(count);
+    try {
+      const response = await fetch (`/api/favoriteCafeById`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({fsq_id})
+      });
+
+      const dbCafeStore = await response.json();
+      if (dbCafeStore && dbCafeStore.length > 0) {
+        let count = votingCtn + 1;
+        setVotingCtn(count);
+      }
+      console.log('from airtable: update upvt', {dbCafeStore});
+    } catch (error: any) {
+      throw new Error('error upving cafeteria', error)
+    }
   };
+
+  if (error) {
+    return <div>Error occur retrieving cafeteria</div>
+  }
+
 
   return (
     <div className={styles.layout}>

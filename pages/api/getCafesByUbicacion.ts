@@ -3,10 +3,6 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { fetchCafeterias } from "../../lib/cafeterias_lib";
 
-type Data = {
-  name: string;
-};
-
 export const getCafesByUbicacion = async (
   req: NextApiRequest,
   res: NextApiResponse
@@ -18,8 +14,8 @@ export const getCafesByUbicacion = async (
 
     res.status(200).json(response);
   } catch (error: any) {
-    throw new Error("there is an error", error);
     res.status(500).json({ message: "ohhh ohh", error });
+    throw new Error("there is an error", error);
   }
 };
 
