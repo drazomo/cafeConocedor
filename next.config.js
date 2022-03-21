@@ -4,6 +4,7 @@ const nextConfig = {
 }
 
 module.exports = {
+  target: 'serverless',
   nextConfig,
   images: {
     domains: ['cdn.pixabay.com', 'images.unsplash.com']

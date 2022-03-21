@@ -40,7 +40,7 @@ const Home = (props: InferGetStaticPropsType<typeof getStaticProps>) => {
         })
       } catch (error) {
         setCafesUbicadasError(error as Error);
-        throw new Error('location fetch error');
+        throw new Error('FE: location fetch error');
       }
     }
   }

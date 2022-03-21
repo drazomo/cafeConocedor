@@ -1,34 +1,62 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Cafe Conoceder
 
-## Getting Started
+Find Cafes near you! Next.js web app use to find cafe shops near you using foursquare api and some static cafes in Valencia, ES.
 
-First, run the development server:
+**Link to project:** https://cafe-conocedor.vercel.app/
 
-```bash
-npm run dev
-# or
-yarn dev
-```
+![alt tag](./public/static/cafe_conocedor.gif)
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## How It's Made:
 
-You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
+**Tech used:** HTML, CSS, JavaScript, Next.js (w/srw), TypeScript
+**APIs used:** Foursquare (library & snippets created), unsplash, airtable (library & snippets created)
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
+RENDERING CAFES IN VALENCIA:
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+- fetchCafeterias
+  I’ve created a library to fetch data from our foursquare api (caeterias_lib.ts). If there is an instance with no arguments the api will fetch data of our default value (Valencia lat. and long. and a limit of 6.) Results retrieved from our fsq_api will be parsed and the value returned for it will include data that is needed to be displayed as well as adding photos into that object from our unsplash api being picked by the objects’ indexes. The fetchCafeterias will be used for any users’ requests for cafes nearby.
 
-## Learn More
+The cards will be already pre rendered therefore the use of getStaticProps is needed to successfully be prebuilt.
 
-To learn more about Next.js, take a look at the following resources:
+Our homepage (index.tsx) has a props argument which is our props from getstatic props and will pass through our data into our card component.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+RENDER CARDS BASED ON USER’S LOCATION:
+Use of react context will be used to manage the state of our newly created coffee store data not from our static props and it will retrieve our latitude and longitude and list of six cafes from the users’ query location. Our array of cafes will be used for our dynamic page every time a user clicks on the card.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+Based on our length of the retrieved array the cards will be rendered.
 
-## Deploy on Vercel
+RENDER INDIVIDUAL DYNAMIC PAGE:
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+With the help of our contextApi we will filter the specific cafeteria based on our param id which then sets it in our hook cafeStore. The creation of handleCreateCafe store is intended to save it into our airtable database in case if the users decides to share the link and there is no context identified.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+When context is not used to find the cafeteria, swr will be used to fetch our data and set our voting count.
+
+The handUpVoteBtn click will handle a put request to airtable to update our upvote value.
+
+## Optimizations
+
+If the user did not open any of the cards but instead copy and pasted the link to the dynamic page and share it with someone it will render a 404 page due to it not going through our createCafeStore api and saving the information into our airtable. We could optimize this error if a user updates or initiates use-track-location we can also send all that data into our airtable.
+
+Under favoriteCafeById.ts there is a constant records declared as an any type. This can be later optimized if the project is scaled and a team is involved.
+
+## Lessons Learned:
+
+👩‍💻 First Project to implement TypeScript.
+✅ Use of Next Image component and defining it src under next.config.js.
+✅ GetStaticProps to fetch items from apis at pre-build time.
+✅ Organizing custom snippets and hooks in its own folder.
+✅ Dynamic Page Routing: GetStaticPaths, the function of fallbacks, useRouter to
+✅ Creating serverless functions. (under api folder in pages)
+✅ ContextApi is extremely similar to react-redux and the first type using a statemanager with TypeScript.
+✅ instead of chaining fetch. use async/await as a way to chunk / readability.
+✅ res.ok => res.status(400)
+✅ TypeScript: to ensure that it will always return a value use an !.
+✅ If you want to provide a type in a useState ensure it with a generic.
+✅ async/await should have their own function inside a useEffect.
+✅ Vague api/server errors? check the network tab in your browser.
+
+## Where to find more:
+
+**Personal Website:** https://markrasavong.com/
+
+**My Github Repository:** https://github.com/mark-rasavong?tab=repositories
