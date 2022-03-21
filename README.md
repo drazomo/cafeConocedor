@@ -21,7 +21,8 @@ The cards will be already pre rendered therefore the use of getStaticProps is ne
 Our homepage (index.tsx) has a props argument which is our props from getstatic props and will pass through our data into our card component.
 
 - RENDER CARDS BASED ON USER’S LOCATION:
-  Use of react context will be used to manage the state of our newly created coffee store data not from our static props and it will retrieve our latitude and longitude and list of six cafes from the users’ query location. Our array of cafes will be used for our dynamic page every time a user clicks on the card.
+
+Use of react context will be used to manage the state of our newly created coffee store data not from our static props and it will retrieve our latitude and longitude and list of six cafes from the users’ query location. Our array of cafes will be used for our dynamic page every time a user clicks on the card.
 
 Based on our length of the retrieved array the cards will be rendered.
 
