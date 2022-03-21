@@ -11,21 +11,21 @@ Find Cafes near you! Next.js web app use to find cafe shops near you using fours
 **Tech used:** HTML, CSS, JavaScript, Next.js (w/srw), TypeScript
 **APIs used:** Foursquare (library & snippets created), unsplash, airtable (library & snippets created)
 
-RENDERING CAFES IN VALENCIA:
+- RENDERING CAFES IN VALENCIA:
 
-- fetchCafeterias
-  I’ve created a library to fetch data from our foursquare api (caeterias_lib.ts). If there is an instance with no arguments the api will fetch data of our default value (Valencia lat. and long. and a limit of 6.) Results retrieved from our fsq_api will be parsed and the value returned for it will include data that is needed to be displayed as well as adding photos into that object from our unsplash api being picked by the objects’ indexes. The fetchCafeterias will be used for any users’ requests for cafes nearby.
+fetchCafeterias
+I’ve created a library to fetch data from our foursquare api (caeterias_lib.ts). If there is an instance with no arguments the api will fetch data of our default value (Valencia lat. and long. and a limit of 6.) Results retrieved from our fsq_api will be parsed and the value returned for it will include data that is needed to be displayed as well as adding photos into that object from our unsplash api being picked by the objects’ indexes. The fetchCafeterias will be used for any users’ requests for cafes nearby.
 
 The cards will be already pre rendered therefore the use of getStaticProps is needed to successfully be prebuilt.
 
 Our homepage (index.tsx) has a props argument which is our props from getstatic props and will pass through our data into our card component.
 
-RENDER CARDS BASED ON USER’S LOCATION:
-Use of react context will be used to manage the state of our newly created coffee store data not from our static props and it will retrieve our latitude and longitude and list of six cafes from the users’ query location. Our array of cafes will be used for our dynamic page every time a user clicks on the card.
+- RENDER CARDS BASED ON USER’S LOCATION:
+  Use of react context will be used to manage the state of our newly created coffee store data not from our static props and it will retrieve our latitude and longitude and list of six cafes from the users’ query location. Our array of cafes will be used for our dynamic page every time a user clicks on the card.
 
 Based on our length of the retrieved array the cards will be rendered.
 
-RENDER INDIVIDUAL DYNAMIC PAGE:
+- RENDER INDIVIDUAL DYNAMIC PAGE:
 
 With the help of our contextApi we will filter the specific cafeteria based on our param id which then sets it in our hook cafeStore. The creation of handleCreateCafe store is intended to save it into our airtable database in case if the users decides to share the link and there is no context identified.
 
