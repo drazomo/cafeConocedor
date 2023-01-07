@@ -129,11 +129,6 @@ const Cafeteria = (initialProps: InferGetStaticPropsType<typeof getStaticProps>)
     }
   };
 
-  if (error) {
-    return <div>Error occur retrieving cafeteria</div>
-  }
-
-
   return (
     <div className={styles.layout}>
       <Head>
